@@ -26,31 +26,33 @@ const SearchForm = () => {
 
   useEffect(() => {
     const searchJewel = jewels[0];
-    for(let i=searchJewel.min; i <= 1000; i++) {
-      postData(searchJewel.unique, i, searchJewel.jewel[1]).then((data)=>{
-        if(!data.datas) {
-          return;
-        }
-        const skills = data.datas.filter(d => br31683.includes(d.skill) && d.typeStats.indexOf('플라스크') > -1).map(d=> d.skill);
-        if(skills.length === 0) {
-          return;
-        }
-        setDatas(prev => [
-          ...prev,
-          {jewel: i, skills}
-        ]);
-      })
+    const start = 7000;
+    const end = 8000;
+    for(let i=start; i <= end; i++) {
+        postData(searchJewel.unique, i, searchJewel.jewel[1]).then((data)=>{
+          if(!data.datas) {
+            return;
+          }
+          const skills = data.datas.filter(d => br31683.includes(d.skill) && d.typeStats.indexOf('충전량') > -1).map(d=> d.skill);
+          if(skills.length < 2) {
+            return;
+          }
+          setDatas(prev => [
+            ...prev,
+            {jewel: i, skills}
+          ]);
+        })
     }
   }, [])
 
   return (
-    <>
+    <div style={{display:' flex', flexFlow:'wrap'}}>
     {
       datas.map((data) => (
-        <div key={data.jewel}>{`${data.jewel}: ${data.skills}`}</div>
+        <div key={data.jewel} style={{padding: '10px', border: '1px solid'}}>{`${data.jewel}: ${data.skills}`}</div>
       ))
     }
-    </>
+    </div>
     )
 
 }
